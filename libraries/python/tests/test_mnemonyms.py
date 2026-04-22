@@ -30,7 +30,9 @@ class MnemonymTest(unittest.TestCase):
                 self.assertEqual(
                     vec[0], eny_from_nym, f"round-trip failed for entropy {vec[0]}"
                 )
-                self.assertEqual(vec[1], nym_from_eny, f"to_nym failed for entropy {vec[0]}")
+                self.assertEqual(
+                    vec[1], nym_from_eny, f"to_nym failed for entropy {vec[0]}"
+                )
 
     def test_complete_word(self) -> None:
         with open("../../../test-vectors.json", "r") as fil:
@@ -51,8 +53,10 @@ class MnemonymTest(unittest.TestCase):
 
         nym = Mnemonym(False, 256, wordlist)
 
-        self.assertEqual("zone", nym.complete_word("..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zon"))
-        self.assertIsNone(nym.complete_word("..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zo"))
+        self.assertEqual("zone", nym.complete_word(
+            "..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zon"))
+        self.assertIsNone(nym.complete_word(
+            "..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zo"))
 
         return None
 
