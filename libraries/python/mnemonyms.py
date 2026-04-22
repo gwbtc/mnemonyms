@@ -46,9 +46,9 @@ class Mnemonym:
 
     def to_eny(self, nym: str) -> str:
         if nym.startswith(".."):
-            words_str = nym[2:]
+            words_str: str = nym[2:]
         elif nym.startswith("."):
-            words_str = nym[1:]
+            words_str: str = nym[1:]
         else:
             raise ValueError("Nym must start with '.' or '..'")
 
