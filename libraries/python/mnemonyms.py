@@ -106,14 +106,18 @@ class Mnemonym:
 
         return False
 
-    @classmethod
-    def complete_current_word(cls, nym: str) -> str:
-        # TODO
-        # split nym
-        # get last fragment
-        # search for fragment in wordlist
-        # if there's only one result, return it
-        return "foobarbaz"
+    def complete_word(self, nym: str) -> str | None:
+        if nym.startswith(".."):
+            rest: str = nym[2:]
+        elif nym.startswith("."):
+            rest: str = nym[1:]
+        else:
+            raise ValueError("Nym must start with '.' or '..'")
+
+        fragment: str = rest.split(".")[-1]
+        matches: list[str] = [w for w in self.wordlist if w.startswith(fragment)]
+
+        return matches[0] if len(matches) == 1 else None
 
     @classmethod
     def complete_current_nym(cls, nym: str, nyms: list[str]) -> str:
