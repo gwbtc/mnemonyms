@@ -119,9 +119,21 @@ class Mnemonym:
 
         return matches[0] if len(matches) == 1 else None
 
-    @classmethod
-    def complete_current_nym(cls, nym: str, nyms: list[str]) -> str:
-        # TODO
-        # search for nym in nyms
-        # if there's only one result, return it
-        return "foobarbaz"
+    def complete_nym(self, nym: str) -> str | None:
+        if nym.startswith(".."):
+            prefix: str = ".."
+            rest: str = nym[2:]
+        elif nym.startswith("."):
+            prefix: str = "."
+            rest: str = nym[1:]
+        else:
+            raise ValueError("Nym must start with '.' or '..'")
+
+        parts: list[str] = rest.split(".")
+        completed: str = self.complete_word(nym)
+
+        if completed is None:
+            return None
+
+        parts[-1] = completed
+        return prefix + ".".join(parts)

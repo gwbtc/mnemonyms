@@ -56,6 +56,31 @@ class MnemonymTest(unittest.TestCase):
 
         return None
 
+    def test_complete_nym(self) -> None:
+        with open("../../../test-vectors.json", "r") as fil:
+            vectors = json.load(fil)
+
+        for lang in vectors.keys():
+            path = os.path.join(
+                os.path.dirname(__file__),
+                f"../../../wordlists/{lang}.txt",
+            )
+            wordlist = []
+
+            if os.path.exists(path) and os.path.isfile(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    wordlist = [w.strip() for w in f.readlines()]
+            else:
+                raise EnvironmentError(f"Wordlist for {lang} not detected")
+
+        nym = Mnemonym(False, 128, wordlist)
+
+        self.assertEqual(
+            "..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zone",
+            nym.complete_nym("..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zon"))
+        self.assertIsNone(nym.complete_nym(
+            "..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zo"))
+
     def test_validate_nym(self) -> None:
         with open("../../../test-vectors.json", "r") as fil:
             vectors = json.load(fil)
