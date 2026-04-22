@@ -73,18 +73,38 @@ class Mnemonym:
 
         raise ValueError(f"Failed to decode nym: checksum mismatch for all valid lengths")
 
-    @classmethod
-    def validate_nym(cls, nym: str) -> bool:
-        # TODO
-        # check string begins with "." or ".."
-        # remove dot(s)
-        # split remainder by "."
-        # validate length of words
-        # validate each word is in wordlist
-        # validate checksum
-        # check to_eny() result against checksum
-        #   derives bitwidth from self.strength
-        return True
+    def validate_nym(self, nym: str) -> bool:
+        if nym.startswith(".."):
+            words_str: str = nym[2:]
+        elif nym.startswith("."):
+            words_str: str = nym[1:]
+        else:
+            return False
+
+        words: list[str] = words_str.split(".")
+
+        for w in words:
+            if w not in self.wordlist:
+                return False
+
+        for n_bytes in range(128, 0, -4):
+            total_words = (n_bytes * 8 + n_bytes * 8 // 32) // 11
+            if total_words < len(words):
+                continue
+
+            leading_zeros: int = total_words - len(words)
+            indices: int = [0] * leading_zeros + [self.wordlist.index(w) for w in words]
+            b: str = "".join(bin(idx)[2:].zfill(11) for idx in indices)
+            checksum_bits: int = len(b) // 33
+            entropy_bits: int = len(b) - checksum_bits
+            entropy: int = int(b[:entropy_bits], 2).to_bytes(entropy_bits // 8, byteorder="big")
+            h: str = hashlib.sha256(entropy).hexdigest()
+            expected_cs: str = bin(int(h, 16))[2:].zfill(256)[:checksum_bits]
+
+            if b[entropy_bits:] == expected_cs:
+                return True
+
+        return False
 
     @classmethod
     def complete_current_word(cls, nym: str) -> str:
