@@ -29,8 +29,10 @@ class MnemonymTest(unittest.TestCase):
             for vec in vectors[lang]:
                 nym_from_eny = nym.to_nym(bytes.fromhex(vec[0]))
                 eny_from_nym = nym.to_eny(nym_from_eny)
-                self.assertEqual(vec[0], eny_from_nym, "foobar")
-                self.assertEqual(vec[1], nym_from_eny, "foobaz")
+                self.assertEqual(
+                    vec[0], eny_from_nym, f"round-trip failed for entropy {vec[0]}"
+                )
+                self.assertEqual(vec[1], nym_from_eny, f"to_nym failed for entropy {vec[0]}")
 
     def test_complete_word(self) -> None:
         return None
