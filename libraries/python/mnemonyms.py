@@ -20,6 +20,8 @@ class Mnemonym:
                 f"Wordlist must contain exactly {self.wordlist_length} words",
             )
 
+        self.tweaked = tweaked
+        self.strength = strength
         self.wordlist = wordlist
 
     @classmethod
