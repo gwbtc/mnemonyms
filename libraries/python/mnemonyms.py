@@ -1,6 +1,7 @@
 # mnemonyms.py
 
 from __future__ import annotations
+import hashlib
 
 
 class ConfigurationError(Exception):
@@ -24,37 +25,55 @@ class Mnemonym:
         self.strength = strength
         self.wordlist = wordlist
 
-    @classmethod
-    def to_nym(cls, data: bytes) -> str:
-        # TODO
-        # validate length of byte array
-        # deserialize eny into array of bytes
-        # for each byte in array
-        #   convert byte into index number
-        #   get word from index
-        #   append word to result array
-        # return result array
-        # join result array with "."
-        # if self.tweaked = True
-        #   prepend "." to result
-        # else
-        #  prepend ".." to result
-        return "foobar"
+    def to_nym(self, data: bytes) -> str:
+        if len(data) == 0 or len(data) % 4 != 0:
+            raise ValueError(
+                f"Input must be a non-zero multiple of 32 bits, got {len(data) * 8} bits"
+            )
 
-    @classmethod
-    def to_eny(cls, nym: str) -> bytes:
-        # TODO
-        # validate_nym(nym)
-        # remove "." or ".." at the beginning of the string
-        # split remainder by "."
-        # define bitwidth = len(words) * 11
-        # for word in words
-        #  find word's index
-        #  set next 11 bits to value of the index
-        #  extract original entropy as bytes
-        #  create checksum of entropy
-        #  return entropy
-        return b"\x00" * 8
+        h: str = hashlib.sha256(data).hexdigest()
+        b: str = (
+            bin(int.from_bytes(data, byteorder="big"))[2:].zfill(len(data) * 8)
+            + bin(int(h, 16))[2:].zfill(256)[:len(data) * 8 // 32]
+        )
+        indices: int = [int(b[i * 11:(i + 1) * 11], 2) for i in range(len(b) // 11)]
+
+        while indices and indices[0] == 0:
+            indices.pop(0)
+
+        words: list[str] = [self.wordlist[idx] for idx in indices]
+        prefix: str = "." if self.tweaked else ".."
+
+        return prefix + ".".join(words)
+
+    def to_eny(self, nym: str) -> str:
+        if nym.startswith(".."):
+            words_str = nym[2:]
+        elif nym.startswith("."):
+            words_str = nym[1:]
+        else:
+            raise ValueError("Nym must start with '.' or '..'")
+
+        words: list[str] = words_str.split(".")
+
+        for n_bytes in range(128, 0, -4):
+            total_words = (n_bytes * 8 + n_bytes * 8 // 32) // 11
+            if total_words < len(words):
+                continue
+
+            leading_zeros: int = total_words - len(words)
+            indices: int = [0] * leading_zeros + [self.wordlist.index(w) for w in words]
+            b: str = "".join(bin(idx)[2:].zfill(11) for idx in indices)
+            checksum_bits: int = len(b) // 33
+            entropy_bits: int = len(b) - checksum_bits
+            entropy: int = int(b[:entropy_bits], 2).to_bytes(entropy_bits // 8, byteorder="big")
+            h: str = hashlib.sha256(entropy).hexdigest()
+            expected_cs: str = bin(int(h, 16))[2:].zfill(256)[:checksum_bits]
+
+            if b[entropy_bits:] == expected_cs:
+                return entropy.hex()
+
+        raise ValueError(f"Failed to decode nym: checksum mismatch for all valid lengths")
 
     @classmethod
     def validate_nym(cls, nym: str) -> bool:
