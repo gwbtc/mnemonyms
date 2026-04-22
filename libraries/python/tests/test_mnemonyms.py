@@ -1,5 +1,3 @@
-# test_mnemonyms.py
-
 import os
 import json
 import unittest
