@@ -22,9 +22,9 @@ class MnemonymTest(unittest.TestCase):
             else:
                 raise EnvironmentError(f"Wordlist for {lang} not detected")
 
-            nym = Mnemonym(False, 128, wordlist)
-
             for vec in vectors[lang]:
+                strength = len(bytes.fromhex(vec[0])) * 8
+                nym = Mnemonym(False, strength, wordlist)
                 nym_from_eny = nym.to_nym(bytes.fromhex(vec[0]))
                 eny_from_nym = nym.to_eny(nym_from_eny)
                 self.assertEqual(
@@ -49,7 +49,7 @@ class MnemonymTest(unittest.TestCase):
             else:
                 raise EnvironmentError(f"Wordlist for {lang} not detected")
 
-        nym = Mnemonym(False, 128, wordlist)
+        nym = Mnemonym(False, 256, wordlist)
 
         self.assertEqual("zone", nym.complete_word("..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zon"))
         self.assertIsNone(nym.complete_word("..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zo"))
@@ -73,7 +73,7 @@ class MnemonymTest(unittest.TestCase):
             else:
                 raise EnvironmentError(f"Wordlist for {lang} not detected")
 
-        nym = Mnemonym(False, 128, wordlist)
+        nym = Mnemonym(False, 256, wordlist)
 
         self.assertEqual(
             "..zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zoo.zone",
@@ -98,10 +98,13 @@ class MnemonymTest(unittest.TestCase):
             else:
                 raise EnvironmentError(f"Wordlist for {lang} not detected")
 
-        nym = Mnemonym(False, 128, wordlist)
-
         for vec in vectors[lang]:
-            self.assertEqual(True, nym.validate_nym(vec[1]), f"Failed to validate nym {vec[1]}")
+            strength = len(bytes.fromhex(vec[0])) * 8
+            nym = Mnemonym(False, strength, wordlist)
+            self.assertEqual(
+                True, nym.validate_nym(
+                    vec[1]), f"Failed to validate nym {vec[1]}"
+            )
 
 
 def __main__() -> None:

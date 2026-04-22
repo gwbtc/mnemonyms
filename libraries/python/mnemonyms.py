@@ -19,14 +19,19 @@ class Mnemonym:
                 f"Wordlist must contain exactly {self.wordlist_length} words",
             )
 
+        if strength < 32 or strength % 32 != 0:
+            raise ConfigurationError(
+                f"Strength must be a non-zero multiple of 32 bits, got {strength}"
+            )
+
         self.tweaked = tweaked
         self.strength = strength
         self.wordlist = wordlist
 
     def to_nym(self, data: bytes) -> str:
-        if len(data) == 0 or len(data) % 4 != 0:
+        if len(data) != self.strength // 8:
             raise ValueError(
-                f"Input must be a non-zero multiple of 32 bits, got {len(data) * 8} bits"
+                f"Input must be {self.strength} bits, got {len(data) * 8} bits"
             )
 
         h: str = hashlib.sha256(data).hexdigest()
@@ -53,25 +58,26 @@ class Mnemonym:
             raise ValueError("Nym must start with '.' or '..'")
 
         words: list[str] = words_str.split(".")
+        total_words: int = (self.strength + self.strength // 32) // 11
 
-        for n_bytes in range(128, 0, -4):
-            total_words = (n_bytes * 8 + n_bytes * 8 // 32) // 11
-            if total_words < len(words):
-                continue
+        if len(words) > total_words:
+            raise ValueError(
+                f"Nym has {len(words)} words but {self.strength}-bit strength allows at most {total_words}"
+            )
 
-            leading_zeros: int = total_words - len(words)
-            indices: int = [0] * leading_zeros + [self.wordlist.index(w) for w in words]
-            b: str = "".join(bin(idx)[2:].zfill(11) for idx in indices)
-            checksum_bits: int = len(b) // 33
-            entropy_bits: int = len(b) - checksum_bits
-            entropy: int = int(b[:entropy_bits], 2).to_bytes(entropy_bits // 8, byteorder="big")
-            h: str = hashlib.sha256(entropy).hexdigest()
-            expected_cs: str = bin(int(h, 16))[2:].zfill(256)[:checksum_bits]
+        leading_zeros: int = total_words - len(words)
+        indices: list[int] = [0] * leading_zeros + [self.wordlist.index(w) for w in words]
+        b: str = "".join(bin(idx)[2:].zfill(11) for idx in indices)
+        checksum_bits: int = len(b) // 33
+        entropy_bits: int = len(b) - checksum_bits
+        entropy: bytes = int(b[:entropy_bits], 2).to_bytes(entropy_bits // 8, byteorder="big")
+        h: str = hashlib.sha256(entropy).hexdigest()
+        expected_cs: str = bin(int(h, 16))[2:].zfill(256)[:checksum_bits]
 
-            if b[entropy_bits:] == expected_cs:
-                return entropy.hex()
+        if b[entropy_bits:] != expected_cs:
+            raise ValueError("Failed to decode nym: checksum mismatch")
 
-        raise ValueError(f"Failed to decode nym: checksum mismatch for all valid lengths")
+        return entropy.hex()
 
     def validate_nym(self, nym: str) -> bool:
         if nym.startswith(".."):
@@ -87,24 +93,21 @@ class Mnemonym:
             if w not in self.wordlist:
                 return False
 
-        for n_bytes in range(128, 0, -4):
-            total_words = (n_bytes * 8 + n_bytes * 8 // 32) // 11
-            if total_words < len(words):
-                continue
+        total_words: int = (self.strength + self.strength // 32) // 11
 
-            leading_zeros: int = total_words - len(words)
-            indices: int = [0] * leading_zeros + [self.wordlist.index(w) for w in words]
-            b: str = "".join(bin(idx)[2:].zfill(11) for idx in indices)
-            checksum_bits: int = len(b) // 33
-            entropy_bits: int = len(b) - checksum_bits
-            entropy: int = int(b[:entropy_bits], 2).to_bytes(entropy_bits // 8, byteorder="big")
-            h: str = hashlib.sha256(entropy).hexdigest()
-            expected_cs: str = bin(int(h, 16))[2:].zfill(256)[:checksum_bits]
+        if len(words) > total_words:
+            return False
 
-            if b[entropy_bits:] == expected_cs:
-                return True
+        leading_zeros: int = total_words - len(words)
+        indices: list[int] = [0] * leading_zeros + [self.wordlist.index(w) for w in words]
+        b: str = "".join(bin(idx)[2:].zfill(11) for idx in indices)
+        checksum_bits: int = len(b) // 33
+        entropy_bits: int = len(b) - checksum_bits
+        entropy: bytes = int(b[:entropy_bits], 2).to_bytes(entropy_bits // 8, byteorder="big")
+        h: str = hashlib.sha256(entropy).hexdigest()
+        expected_cs: str = bin(int(h, 16))[2:].zfill(256)[:checksum_bits]
 
-        return False
+        return b[entropy_bits:] == expected_cs
 
     def complete_word(self, nym: str) -> str | None:
         if nym.startswith(".."):
