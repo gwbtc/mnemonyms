@@ -1,11 +1,13 @@
-|%
-+$  hex   @ux
-+$  nym   @t
-+$  word  @t
---
 ::
+::  helper core
 |%
-++  split-dots
++$  nym    @t
++$  word   @t
++$  hex    @ux
++$  width  @ud
+::
+++  split-by-dots
+  ::  XX refactor to use Hoon's built-in parsing
   |=  t=tape
   ^-  (list tape)
   =|  cur=tape
@@ -16,48 +18,95 @@
     $(t t.t, cur ~, acc [(flop cur) acc])
   $(t t.t, cur [i.t cur])
 ::
+++  count-bytes
+  |=  =width
+  ^-  @ud
+  (div width 8)
+::
+++  count-cs-lent
+  |=  =width
+  ^-  @ud
+  (div width 32)
+::
+++  count-total-bits
+  |=  =width
+  ^-  @ud
+  (add width (count-cs-lent width))
+::
+++  count-total-words
+  |=  bits=@ud
+  ^-  @ud
+  (div bits 11)
+::
+::  sha256 of big-endian entropy bytes;
+::  shay returns hash with byte[0] as LSB
+++  sha256-hash
+  |=  [=hex =width]
+  (shay [(count-bytes width) (rev 3 (count-bytes width) hex)])
+::
+::  top .cs-lent bits of (sha256-hash (LSB of hex))
+++  derive-checksum
+  |=  [=hex =width]
+  ^-  @ux
+  (rsh [0 (sub 8 (count-cs-lent width))] (end [3 1] (sha256-hash hex width)))
+::
+::  entropy bits followed by checksum bits
+++  concat-eny-cs
+  |=  [=hex =width]
+  ^-  @ux
+  (add (lsh [0 (count-cs-lent width)] hex) (derive-checksum hex width))
+::
+++  get-idx
+  |=  [tot=@ud com=@ux k=@ud]
+  ^-  @ud
+  ::  0x7ff = 2.047
+  (dis (rsh [0 (mul 11 (sub (dec tot) k))] com) 0x7ff)
+--
+::
+::  mnemonym core
+|%
 ++  me
-  |_  [tweaked=? width=@ud wordlist=(list word)]
+  |_  [tweaked=? =width wordlist=(list word)]
   ::
   ++  decode
     |=  =hex
     ^-  nym
-    =/  n-bytes=@ud      (div width 8)
-    =/  cs-bits=@ud      (div width 32)
-    =/  total-bits=@ud   (add width cs-bits)
-    =/  total-words=@ud  (div total-bits 11)
-    ::  sha256 of big-endian entropy bytes; shay returns hash with byte[0] as LSB
-    =/  hash=@ux         (shay [n-bytes (rev 3 n-bytes hex)])
-    ::  checksum = top cs-bits of sha256 byte[0] (the LSB of the hash atom)
-    =/  cs=@ux           `@ux`(rsh [0 (sub 8 cs-bits)] (end [3 1] hash))
-    ::  combined = entropy bits followed by checksum bits
-    =/  combined=@ux     (add (lsh [0 cs-bits] hex) cs)
-    ::  extract total-words 11-bit indices, MSB first
-    =/  indices=(list @ud)
-      =/  acc=(list @ud)  ~
-      =/  k=@ud  0
-      |-
-      ?:  =(k total-words)  (flop acc)
-      =/  shift=@ud  (mul 11 (sub (sub total-words 1) k))
-      =/  idx=@ud    (dis (rsh [0 shift] combined) 0x7ff)
-      $(k +(k), acc [idx acc])
-    ::  drop leading zero indices
-    =/  trimmed=(list @ud)
-      =/  lst=(list @ud)  indices
-      |-
-      ?~  lst  lst
-      ?:  =(0 i.lst)  $(lst t.lst)
-      lst
+    =/  combined=@ux  (concat-eny-cs hex width)
+    =/  total=@ud     (count-total-words (count-total-bits width))
+    ::  get words
     =/  words=(list tape)
-      %+  turn  trimmed
-      |=(idx=@ud (trip (snag idx wordlist)))
-    =/  prefix=tape  ?:(tweaked "." "..")
-    =/  body=tape
-      ?~  words  ""
-      %-  zing
-      :-  i.words
-      (turn t.words |=(w=tape (weld "." w)))
-    (crip (weld prefix body))
+      %-  turn
+      :_  ::  get index from wordlist
+          |=  idx=@ud
+          %-  trip
+          %+  snag
+            idx
+          wordlist
+      ^-  (list @ud)
+      ::  drop leading zero indices
+      =/  indices=(list @ud)
+        ::  extract 11-bit indices
+        %-  flop
+        %+  roll
+          (gulf 0 (dec total))
+        |=  [k=@ud acc=(list @ud)]
+        [(get-idx total combined k) acc]
+      |-
+      ?~  indices
+        indices
+      ?:  =(0 i.indices)
+        $(indices t.indices)
+      indices
+    ::
+    ::  format string
+    %-  crip
+    %+  welp
+      ?:(tweaked "." "..")
+    ?~  words
+      ""
+    %-  zing
+    :-  i.words
+    (turn t.words |=(w=tape (weld "." w)))
   ::
   ++  encode
     |=  =nym
@@ -71,7 +120,7 @@
       ?:  is-double  t.t.nym-tape
       ?.  =('.' i.nym-tape)  !!
       t.nym-tape
-    =/  word-tapes=(list tape)  (split-dots rest)
+    =/  word-tapes=(list tape)  (split-by-dots rest)
     =/  n-bytes=@ud      (div width 8)
     =/  cs-bits=@ud      (div width 32)
     =/  total-bits=@ud   (add width cs-bits)
@@ -105,7 +154,7 @@
     ?.  ?=(^ t.nym-tape)  ~
     =/  is-double=?  =('.' i.t.nym-tape)
     =/  rest=tape  ?:(is-double t.t.nym-tape t.nym-tape)
-    =/  iparts=(list tape)  (split-dots rest)
+    =/  iparts=(list tape)  (split-by-dots rest)
     ?.  ?=(^ iparts)  ~
     |-  ^-  (unit nym)
     ?~  nyms  ~
@@ -117,7 +166,7 @@
       ?.  ?=(^ t.cand-tape)  .n
       =/  cand-is-double=?  =('.' i.t.cand-tape)
       =/  cand-rest=tape  ?:(cand-is-double t.t.cand-tape t.cand-tape)
-      =/  cparts=(list tape)  (split-dots cand-rest)
+      =/  cparts=(list tape)  (split-by-dots cand-rest)
       =/  ip=(list tape)  iparts
       =/  cp=(list tape)  cparts
       |-  ^-  ?
@@ -151,7 +200,7 @@
       ?:  is-double  t.t.nym-tape
       ?.  =('.' i.nym-tape)  !!
       t.nym-tape
-    =/  word-tapes=(list tape)  (split-dots rest)
+    =/  word-tapes=(list tape)  (split-by-dots rest)
     =/  n-bytes=@ud      (div width 8)
     =/  cs-bits=@ud      (div width 32)
     =/  total-bits=@ud   (add width cs-bits)
@@ -186,7 +235,7 @@
     =/  is-double=?  =('.' i.t.nym-tape)
     =/  prefix=tape  ?:(is-double ".." ".")
     =/  rest=tape    ?:(is-double t.t.nym-tape t.nym-tape)
-    =/  parts=(list tape)  (split-dots rest)
+    =/  parts=(list tape)  (split-by-dots rest)
     ?.  ?=(^ parts)  ~
     =/  n=@ud  (lent parts)
     =/  fragment=tape
