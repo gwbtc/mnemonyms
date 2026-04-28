@@ -115,35 +115,23 @@
     ::  prove at least two chars exist so type system allows t.t access
     ?.  ?=(^ nym-tape)  !!
     ?.  ?=(^ t.nym-tape)  !!
-    =/  is-double=?  ?&(=('.' i.nym-tape) =('.' i.t.nym-tape))
-    =/  rest=tape
-      ?:  is-double  t.t.nym-tape
+    =/  word-tapes=(list tape)
+      %-  split-by-dots
+      ?:  ?&(=('.' i.nym-tape) =('.' i.t.nym-tape))
+        t.t.nym-tape
       ?.  =('.' i.nym-tape)  !!
       t.nym-tape
-    =/  word-tapes=(list tape)  (split-by-dots rest)
-    =/  n-bytes=@ud      (div width 8)
-    =/  cs-bits=@ud      (div width 32)
-    =/  total-bits=@ud   (add width cs-bits)
-    =/  total-words=@ud  (div total-bits 11)
-    =/  n-words=@ud      (lent word-tapes)
-    =/  leading-zeros=@ud  (sub total-words n-words)
-    =/  word-indices=(list @ud)
-      %+  turn  word-tapes
-      |=  wt=tape
-      (need (find ~[(crip wt)] wordlist))
-    =/  all-indices=(list @ud)
-      (weld (reap leading-zeros 0) word-indices)
     ::  rebuild combined atom from indices, MSB first
     =/  combined=@ux
-      %+  roll  all-indices
+      %+  roll
+        %+  weld
+          (reap (sub (count-total-words (count-total-bits width)) (lent word-tapes)) 0)
+        (turn word-tapes |=(wt=tape (need (find ~[(crip wt)] wordlist))))
       |=  [idx=@ud acc=@ux]
       (add (lsh [0 11] acc) idx)
-    =/  entropy=@ux      `@ux`(rsh [0 cs-bits] combined)
-    =/  actual-cs=@ux    `@ux`(dis combined (dec (lsh [0 cs-bits] 1)))
-    =/  hash=@ux         (shay [n-bytes (rev 3 n-bytes entropy)])
-    =/  expected-cs=@ux  `@ux`(rsh [0 (sub 8 cs-bits)] (end [3 1] hash))
-    ?>  =(actual-cs expected-cs)
-    entropy
+    ?>  .=  (dis combined (dec (lsh [0 (count-cs-lent width)] 1)))
+        (derive-checksum `@ux`(rsh [0 (count-cs-lent width)] combined) width)
+    (rsh [0 (count-cs-lent width)] combined)
   ::
   ++  complete
     |=  [query=nym nyms=(list nym)]
@@ -152,9 +140,11 @@
     ?.  ?=(^ nym-tape)  ~
     ?.  =('.' i.nym-tape)  ~
     ?.  ?=(^ t.nym-tape)  ~
-    =/  is-double=?  =('.' i.t.nym-tape)
-    =/  rest=tape  ?:(is-double t.t.nym-tape t.nym-tape)
-    =/  iparts=(list tape)  (split-by-dots rest)
+    =/  iparts=(list tape)
+      %-  split-by-dots
+        ?:  =('.' i.t.nym-tape)
+          t.t.nym-tape
+        t.nym-tape
     ?.  ?=(^ iparts)  ~
     |-  ^-  (unit nym)
     ?~  nyms  ~
@@ -164,11 +154,12 @@
       ?.  ?=(^ cand-tape)  .n
       ?.  =('.' i.cand-tape)  .n
       ?.  ?=(^ t.cand-tape)  .n
-      =/  cand-is-double=?  =('.' i.t.cand-tape)
-      =/  cand-rest=tape  ?:(cand-is-double t.t.cand-tape t.cand-tape)
-      =/  cparts=(list tape)  (split-by-dots cand-rest)
       =/  ip=(list tape)  iparts
-      =/  cp=(list tape)  cparts
+      =/  cp=(list tape)
+        %-  split-by-dots
+        ?:  =('.' i.t.cand-tape)
+          t.t.cand-tape
+        t.cand-tape
       |-  ^-  ?
       ?~  ip  .y
       ?~  cp  .n
@@ -193,36 +184,33 @@
     =/  nym-tape=tape  (trip nym)
     ?.  ?=(^ nym-tape)  !!
     ?.  ?=(^ t.nym-tape)  !!
-    =/  is-double=?  ?&(=('.' i.nym-tape) =('.' i.t.nym-tape))
-    =/  nym-tweaked=?  ?&(!is-double =('.' i.nym-tape))
-    ?>  =(tweaked nym-tweaked)
-    =/  rest=tape
-      ?:  is-double  t.t.nym-tape
-      ?.  =('.' i.nym-tape)  !!
-      t.nym-tape
-    =/  word-tapes=(list tape)  (split-by-dots rest)
-    =/  n-bytes=@ud      (div width 8)
-    =/  cs-bits=@ud      (div width 32)
-    =/  total-bits=@ud   (add width cs-bits)
-    =/  total-words=@ud  (div total-bits 11)
-    =/  n-words=@ud      (lent word-tapes)
-    ?>  (lte n-words total-words)
-    =/  leading-zeros=@ud  (sub total-words n-words)
-    =/  word-indices=(list @ud)
-      %+  turn  word-tapes
-      |=  wt=tape
-      (need (find ~[(crip wt)] wordlist))
-    =/  all-indices=(list @ud)
-      (weld (reap leading-zeros 0) word-indices)
+    ?>  .=  tweaked
+        ?&  ?!  ?&  =('.' i.nym-tape)
+                    =('.' i.t.nym-tape)
+                ==
+            =('.' i.nym-tape)
+        ==
+    =/  word-tapes=(list tape)
+      %-  split-by-dots
+        ?:  ?&  =('.' i.nym-tape)
+                =('.' i.t.nym-tape)
+            ==
+          t.t.nym-tape
+        ?.  =('.' i.nym-tape)
+          !!
+        t.nym-tape
+    ?>  %+  lte
+          (lent word-tapes)
+        (count-total-words (count-total-bits width))
     =/  combined=@ux
-      %+  roll  all-indices
+      %+  roll
+        %+  weld
+          (reap (sub (count-total-words (count-total-bits width)) (lent word-tapes)) 0)
+        (turn word-tapes |=(wt=tape (need (find ~[(crip wt)] wordlist))))
       |=  [idx=@ud acc=@ux]
       (add (lsh [0 11] acc) idx)
-    =/  entropy=@ux      `@ux`(rsh [0 cs-bits] combined)
-    =/  actual-cs=@ux    `@ux`(dis combined (dec (lsh [0 cs-bits] 1)))
-    =/  hash=@ux         (shay [n-bytes (rev 3 n-bytes entropy)])
-    =/  expected-cs=@ux  `@ux`(rsh [0 (sub 8 cs-bits)] (end [3 1] hash))
-    ?>  =(actual-cs expected-cs)
+    ?>  .=  (dis combined (dec (lsh [0 (count-cs-lent width)] 1)))
+        (derive-checksum (rsh [0 (count-cs-lent width)] combined) width)
     .y
   ::
   ++  grow
@@ -232,12 +220,12 @@
     ?.  ?=(^ nym-tape)  ~
     ?.  =('.' i.nym-tape)  ~
     ?.  ?=(^ t.nym-tape)  ~
-    =/  is-double=?  =('.' i.t.nym-tape)
-    =/  prefix=tape  ?:(is-double ".." ".")
-    =/  rest=tape    ?:(is-double t.t.nym-tape t.nym-tape)
-    =/  parts=(list tape)  (split-by-dots rest)
+    =/  parts=(list tape)
+      %-  split-by-dots
+        ?:  =('.' i.t.nym-tape)
+          t.t.nym-tape
+        t.nym-tape
     ?.  ?=(^ parts)  ~
-    =/  n=@ud  (lent parts)
     =/  fragment=tape
       =/  lst  parts
       |-  ^-  tape
@@ -250,17 +238,19 @@
       ?:  (gth (lent fragment) (lent wt))  .n
       =((scag (lent fragment) wt) fragment)
     ?.  =(1 (lent matches))  ~
-    =/  completed=tape  (trip (snag 0 matches))
     =/  new-parts=(list tape)
       =/  lst  parts
       |-  ^-  (list tape)
-      ?~  t.lst  ~[completed]
+      ?~  t.lst
+        ~[(trip (snag 0 matches))]
       [i.lst $(lst t.lst)]
-    =/  body=tape
-      ?~  new-parts  ""
-      %-  zing
-      :-  i.new-parts
-      (turn t.new-parts |=(w=tape (weld "." w)))
-    `(crip (weld prefix body))
+    :-  ~
+    %-  crip
+    %+  welp
+      ?:(=('.' i.t.nym-tape) ".." ".")
+    ?~  new-parts  ""
+    %-  zing
+    :-  i.new-parts
+    (turn t.new-parts |=(w=tape (weld "." w)))
   --
 --
