@@ -1,18 +1,18 @@
 /+  *test, *mnemonyms, ju=json-utils
-/*  english  %txt  /fil/wordlists/english-placeholder/txt
+/*  english  %txt  /fil/wordlists/english/txt
 /*  test-vectors  %json  /fil/test-vectors/json
 ::
 =>
 |%
 ++  mock-hex  0xaa00.da3a.78a5.e2b7.ca84.5ad3.2c2f.339e
 ++  mock-incomplete-nym
-  '..present.almost.model.vanish.funny.fossil.claw.mercy.spring.gest'
+  '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devis'
 ++  mock-partial-nym
-  '..present.almost.model.vanish.funny.fossil.claw.mercy.spring.gesture'
+  '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devise'
 ++  mock-tweaked-nym
-  '.present.almost.model.vanish.funny.fossil.claw.mercy.spring.gesture.smooth.despair'
+  '.perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devise.repents.commutes'
 ++  mock-untweaked-nym
-  '..present.almost.model.vanish.funny.fossil.claw.mercy.spring.gesture.smooth.despair'
+  '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devise.repents.commutes'
 --
 ::
 |%
@@ -53,7 +53,7 @@
   ^-  tang
   ?>  ?=([%o *] test-vectors)
   =/  lang-json=json
-    (need (~(get by p.test-vectors) 'english-placeholder'))
+    (need (~(get by p.jon.test-vectors) 'english'))
   ?>  ?=([%a *] lang-json)
   %-  zing
   %+  turn  p.lang-json
