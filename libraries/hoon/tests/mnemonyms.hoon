@@ -6,6 +6,10 @@
 |%
 ++  mock-hex   0xaa00.da3a.78a5.e2b7.ca84.5ad3.2c2f.339e
 ++  mock-ship  `@p`mock-hex
+++  mock-four-word-nym
+  '..perchance.acquit..repents.commutes'
+++  mock-two-word-nym
+  '..perchance...commutes'
 ++  mock-incomplete-nym
   '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devis'
 ++  mock-partial-nym
@@ -34,6 +38,16 @@
   %+  expect-eq
     !>  mock-untweaked-nym
     !>  (~(name me [.n 128 english]) mock-ship)
+::
+++  test-four-word
+  %+  expect-eq
+    !>  mock-four-word-nym
+    !>  (~(foreshorten me [.n 128 english]) mock-untweaked-nym)
+::
+++  test-two-word
+  %+  expect-eq
+    !>  mock-two-word-nym
+    !>  (~(abridge me [.n 128 english]) mock-untweaked-nym)
 ::
 ++  test-decode
   %+  expect-eq
