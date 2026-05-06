@@ -81,6 +81,78 @@
       !!
     (decode `@ux`ship)
   ::
+  ++  abridge
+    |=  =nym
+    ^-  ^nym
+    =/  nym-tape=tape  (trip nym)
+    ?.  ?=(^ nym-tape)  !!
+    ?.  ?=(^ t.nym-tape)  !!
+    ?>  .=  tweaked
+        ?&  ?!  ?&  =('.' i.nym-tape)
+                    =('.' i.t.nym-tape)
+                ==
+            =('.' i.nym-tape)
+        ==
+    =/  word-tapes=(list tape)
+      %-  split-by-dots
+        ?:  ?&  =('.' i.nym-tape)
+                =('.' i.t.nym-tape)
+            ==
+          t.t.nym-tape
+        ?.  =('.' i.nym-tape)
+          !!
+        t.nym-tape
+    ?:  (lte (lent word-tapes) 2)
+      nym
+    =/  first=tape  (snag 0 word-tapes)
+    =/  last=tape   (snag (dec (lent word-tapes)) word-tapes)
+    %-  crip
+    %-  zing
+    :~  ?:(tweaked "." "..")
+        first
+        "..."
+        last
+    ==
+  ::
+  ++  foreshorten
+    |=  =nym
+    ^-  ^nym
+    =/  nym-tape=tape  (trip nym)
+    ?.  ?=(^ nym-tape)  !!
+    ?.  ?=(^ t.nym-tape)  !!
+    ?>  .=  tweaked
+        ?&  ?!  ?&  =('.' i.nym-tape)
+                    =('.' i.t.nym-tape)
+                ==
+            =('.' i.nym-tape)
+        ==
+    =/  word-tapes=(list tape)
+      %-  split-by-dots
+        ?:  ?&  =('.' i.nym-tape)
+                =('.' i.t.nym-tape)
+            ==
+          t.t.nym-tape
+        ?.  =('.' i.nym-tape)
+          !!
+        t.nym-tape
+    ?:  (lte (lent word-tapes) 4)
+      nym
+    =/  first=tape        (snag 0 word-tapes)
+    =/  second=tape       (snag 1 word-tapes)
+    =/  penultimate=tape  (snag (sub (lent word-tapes) 2) word-tapes)
+    =/  last=tape         (snag (dec (lent word-tapes)) word-tapes)
+    %-  crip
+    %-  zing
+    :~  ?:(tweaked "." "..")
+        first
+        "."
+        second
+        ".."
+        penultimate
+        "."
+        last
+    ==
+  ::
   ++  decode
     |=  =hex
     ^-  nym
