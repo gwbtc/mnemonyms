@@ -68,6 +68,19 @@
 ++  me
   |_  [tweaked=? =width wordlist=(list word)]
   ::
+  ++  ship
+    |=  =nym
+    ^-  ^ship
+    `@p`(encode nym)
+  ::
+  ++  name
+    |=  =^ship
+    ^-  nym
+    ?.  =(%pawn (clan:title ship))
+      ~|  %fallen-clan
+      !!
+    (decode `@ux`ship)
+  ::
   ++  decode
     |=  =hex
     ^-  nym

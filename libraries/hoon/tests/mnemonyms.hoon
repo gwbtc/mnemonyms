@@ -4,7 +4,8 @@
 ::
 =>
 |%
-++  mock-hex  0xaa00.da3a.78a5.e2b7.ca84.5ad3.2c2f.339e
+++  mock-hex   0xaa00.da3a.78a5.e2b7.ca84.5ad3.2c2f.339e
+++  mock-ship  `@p`mock-hex
 ++  mock-incomplete-nym
   '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devis'
 ++  mock-partial-nym
@@ -23,6 +24,16 @@
 ++  test-bad-config-width
   %-  expect-fail
   |.((~(validate me [.n 256 english]) mock-untweaked-nym))
+::
+++  test-ship
+  %+  expect-eq
+    !>  mock-ship
+    !>  (~(ship me [.n 128 english]) mock-untweaked-nym)
+::
+++  test-name
+  %+  expect-eq
+    !>  mock-untweaked-nym
+    !>  (~(name me [.n 128 english]) mock-ship)
 ::
 ++  test-decode
   %+  expect-eq
@@ -53,7 +64,7 @@
   ^-  tang
   ?>  ?=([%o *] test-vectors)
   =/  lang-json=json
-    (need (~(get by p.jon.test-vectors) 'english'))
+    (need (~(get by p.test-vectors) 'english'))
   ?>  ?=([%a *] lang-json)
   %-  zing
   %+  turn  p.lang-json
