@@ -7,17 +7,17 @@
 ++  mock-hex   0xaa00.da3a.78a5.e2b7.ca84.5ad3.2c2f.339e
 ++  mock-ship  `@p`mock-hex
 ++  mock-four-word-nym
-  '..perchance.acquit..repents.commutes'
+  '..offend.adapt..rejects.concludes'
 ++  mock-two-word-nym
-  '..perchance...commutes'
+  '..offend...concludes'
 ++  mock-incomplete-nym
-  '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devis'
+  '..offend.adapt.forsworn.unchained.desire.deprives.bemused.forba'
 ++  mock-partial-nym
-  '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devise'
+  '..offend.adapt.forsworn.unchained.desire.deprives.bemused.forbade'
 ++  mock-tweaked-nym
-  '.perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devise.repents.commutes'
+  '.offend.adapt.forsworn.unchained.desire.deprives.bemused.forbade.repay.dethroned.rejects.concludes'
 ++  mock-untweaked-nym
-  '..perchance.acquit.harpoon.unhinged.designs.deprives.beguile.forget.responds.devise.repents.commutes'
+  '..offend.adapt.forsworn.unchained.desire.deprives.bemused.forbade.repay.dethroned.rejects.concludes'
 --
 ::
 |%
