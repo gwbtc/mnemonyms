@@ -54,10 +54,10 @@ class MnemonymTest(unittest.TestCase):
 
         nym: Mnemonym = Mnemonym(False, 256, wordlist)
 
-        self.assertEqual("withheld", nym.complete_word(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withhe"))
+        self.assertEqual("within", nym.complete_word(
+            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withi"))
         self.assertIsNone(nym.complete_word(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withh"))
+            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.with"))
 
         return None
 
@@ -81,10 +81,10 @@ class MnemonymTest(unittest.TestCase):
         nym: Mnemonym = Mnemonym(False, 256, wordlist)
 
         self.assertEqual(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withheld",
-            nym.complete_nym("..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withhe"))
+            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.within",
+            nym.complete_nym("..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withi"))
         self.assertIsNone(nym.complete_nym(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withh"))
+            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.with"))
 
     def test_validate_nym(self) -> None:
         with open("../../../test-vectors.json", "r") as fil:
