@@ -73,7 +73,6 @@ adore
 adored
 adores
 adorns
-adorns
 adrift
 adult
 advance
@@ -2041,6 +2040,7 @@ vibrate
 vibrates
 vignette
 withdrawn
+withholds
 within
 without
 withstands
