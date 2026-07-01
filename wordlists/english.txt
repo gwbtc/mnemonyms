@@ -141,6 +141,7 @@ alone
 along
 aloof
 aloud
+amassed
 amaze
 amend
 amends
@@ -415,7 +416,6 @@ canteen
 caprice
 caput
 career
-carefree
 caress
 caressed
 cartel
