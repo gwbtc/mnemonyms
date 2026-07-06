@@ -54,10 +54,9 @@ class MnemonymTest(unittest.TestCase):
 
         nym: Mnemonym = Mnemonym(False, 256, wordlist)
 
-        self.assertEqual("within", nym.complete_word(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withi"))
+        self.assertEqual("ablate", nym.complete_word("..ablat"))
         self.assertIsNone(nym.complete_word(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.with"))
+            "..abla"))
 
         return None
 
@@ -81,10 +80,10 @@ class MnemonymTest(unittest.TestCase):
         nym: Mnemonym = Mnemonym(False, 256, wordlist)
 
         self.assertEqual(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.within",
-            nym.complete_nym("..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.withi"))
+            "..ablate",
+            nym.complete_nym("..ablat"))
         self.assertIsNone(nym.complete_nym(
-            "..yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.yourselves.with"))
+            "..abla"))
 
     def test_validate_nym(self) -> None:
         with open("../../../test-vectors.json", "r") as fil:
