@@ -7,17 +7,17 @@
 ++  mock-hex   0xaa00.da3a.78a5.e2b7.ca84.5ad3.2c2f.339e
 ++  mock-ship  `@p`mock-hex
 ++  mock-four-word-nym
-  '..offend.adapt..rejects.concludes'
+  '..motifs.adage..reduce.compares'
 ++  mock-two-word-nym
-  '..offend...concludes'
+  '..motifs...compares'
 ++  mock-incomplete-nym
-  '..offend.adapt.forsworn.unchained.desire.deprives.bemused.forba'
+  '..motifs.adage.fatigued.unheard.deploys.demu'
 ++  mock-partial-nym
-  '..offend.adapt.forsworn.unchained.desire.deprives.bemused.forbade'
+  '..motifs.adage.fatigued.unheard.deploys.demure'
 ++  mock-tweaked-nym
-  '.offend.adapt.forsworn.unchained.desire.deprives.bemused.forbade.repay.dethroned.rejects.concludes'
+  '.motifs.adage.fatigued.unheard.deploys.demure.beheads.explain.relaunch.designs.reduce.compares'
 ++  mock-untweaked-nym
-  '..offend.adapt.forsworn.unchained.desire.deprives.bemused.forbade.repay.dethroned.rejects.concludes'
+  '..motifs.adage.fatigued.unheard.deploys.demure.beheads.explain.relaunch.designs.reduce.compares'
 --
 ::
 |%
@@ -78,7 +78,7 @@
   ^-  tang
   ?>  ?=([%o *] test-vectors)
   =/  lang-json=json
-    (need (~(get by p.test-vectors) 'english'))
+    (need (~(get by p.jon.test-vectors) 'english'))
   ?>  ?=([%a *] lang-json)
   %-  zing
   %+  turn  p.lang-json
