@@ -81,7 +81,6 @@ adult
 advance
 adverse
 advice
-advise
 advised
 afar
 affair
@@ -1898,6 +1897,7 @@ trombone
 trombones
 tycoon
 tycoons
+typhoon
 unarmed
 unblock
 unblocked
