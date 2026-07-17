@@ -127,7 +127,6 @@ alert
 alight
 align
 alike
-alike
 alive
 allay
 allege
@@ -1208,6 +1207,7 @@ ignite
 ignore
 imbibe
 imbue
+immerse
 immune
 impair
 impart
