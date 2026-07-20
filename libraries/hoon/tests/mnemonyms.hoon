@@ -8,27 +8,27 @@
 ++  mock-ship  `@p`mock-hex
 ::
 ++  mock-tweaked-nym
-  '.mundane.adage.ferment.unheard.depose.denies.behest.explode.relax.desired.reduced.comport'
+  '.obscures.adage.frontiers.unite.desires.deranged.beheads.forbid.rely.detour.refresh.commit'
 ++  mock-untweaked-nym
-  '..mundane.adage.ferment.unheard.depose.denies.behest.explode.relax.desired.reduced.comport'
+  '..obscures.adage.frontiers.unite.desires.deranged.beheads.forbid.rely.detour.refresh.commit'
 ::
 ++  mock-four-word-nym-tweaked
-  '.mundane.adage..reduced.comport'
+  '.obscures.adage..refresh.commit'
 ++  mock-two-word-nym-tweaked
-  '.mundane...comport'
+  '.obscures...commit'
 ++  mock-incomplete-nym-tweaked
-  '.mundane.adage.ferment.unhe'
+  '.obscures.adag'
 ++  mock-partial-nym-tweaked
-  '.mundane.adage.ferment.unheard'
+  '.obscures.adage'
 ::
 ++  mock-four-word-nym-untweaked
-  '..mundane.adage..reduced.comport'
+  '..obscures.adage..refresh.commit'
 ++  mock-two-word-nym-untweaked
-  '..mundane...comport'
+  '..obscures...commit'
 ++  mock-incomplete-nym-untweaked
-  '..mundane.adage.ferment.unhe'
+  '..obscures.adag'
 ++  mock-partial-nym-untweaked
-  '..mundane.adage.ferment.unheard'
+  '..obscures.adage'
 --
 ::
 |%
