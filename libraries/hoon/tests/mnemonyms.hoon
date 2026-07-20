@@ -8,27 +8,27 @@
 ++  mock-ship  `@p`mock-hex
 ::
 ++  mock-tweaked-nym
-  '.motifs.adage.fatigued.unheard.deploys.demure.beheads.explain.relaunch.designs.reduce.compares'
+  '.mundane.adage.ferment.unheard.depose.denies.behest.explode.relax.desired.reduced.comport'
 ++  mock-untweaked-nym
-  '..motifs.adage.fatigued.unheard.deploys.demure.beheads.explain.relaunch.designs.reduce.compares'
+  '..mundane.adage.ferment.unheard.depose.denies.behest.explode.relax.desired.reduced.comport'
 ::
 ++  mock-four-word-nym-tweaked
-  '.motifs.adage..reduce.compares'
+  '.mundane.adage..reduced.comport'
 ++  mock-two-word-nym-tweaked
-  '.motifs...compares'
+  '.mundane...comport'
 ++  mock-incomplete-nym-tweaked
-  '.motifs.adage.fatigued.unheard.deploys.demu'
+  '.mundane.adage.ferment.unhe'
 ++  mock-partial-nym-tweaked
-  '.motifs.adage.fatigued.unheard.deploys.demure'
+  '.mundane.adage.ferment.unheard'
 ::
 ++  mock-four-word-nym-untweaked
-  '..motifs.adage..reduce.compares'
+  '..mundane.adage..reduced.comport'
 ++  mock-two-word-nym-untweaked
-  '..motifs...compares'
+  '..mundane...comport'
 ++  mock-incomplete-nym-untweaked
-  '..motifs.adage.fatigued.unheard.deploys.demu'
+  '..mundane.adage.ferment.unhe'
 ++  mock-partial-nym-untweaked
-  '..motifs.adage.fatigued.unheard.deploys.demure'
+  '..mundane.adage.ferment.unheard'
 --
 ::
 |%
