@@ -8,27 +8,27 @@
 ++  mock-ship  `@p`mock-hex
 ::
 ++  mock-tweaked-nym
-  '.obscures.adage.frontiers.unite.desires.deranged.beheads.forbid.rely.detour.refresh.commit'
+  '.obtains.adapts.gazelles.unite.dessert.descend.behold.foreseen.remarks.devolve.regains.comprise'
 ++  mock-untweaked-nym
-  '..obscures.adage.frontiers.unite.desires.deranged.beheads.forbid.rely.detour.refresh.commit'
+  '..obtains.adapts.gazelles.unite.dessert.descend.behold.foreseen.remarks.devolve.regains.comprise'
 ::
 ++  mock-four-word-nym-tweaked
-  '.obscures.adage..refresh.commit'
+  '.obtains.adapts..regains.comprise'
 ++  mock-two-word-nym-tweaked
-  '.obscures...commit'
+  '.obtains...comprise'
 ++  mock-incomplete-nym-tweaked
-  '.obscures.adag'
+  '.obtains.adapts.gazelles.unite.dessert.descend.behold.foreseen.remarks.devolve.regains.compr'
 ++  mock-partial-nym-tweaked
-  '.obscures.adage'
+  '.obtains.adapts.gazelles.unite.dessert.descend.behold.foreseen.remarks.devolve.regains.comprise'
 ::
 ++  mock-four-word-nym-untweaked
-  '..obscures.adage..refresh.commit'
+  '..obtains.adapts..regains.comprise'
 ++  mock-two-word-nym-untweaked
-  '..obscures...commit'
+  '..obtains...comprise'
 ++  mock-incomplete-nym-untweaked
-  '..obscures.adag'
+  '..obtains.adapts.gazelles.unite.dessert.descend.behold.foreseen.remarks.devolve.regains.compr'
 ++  mock-partial-nym-untweaked
-  '..obscures.adage'
+  '..obtains.adapts.gazelles.unite.dessert.descend.behold.foreseen.remarks.devolve.regains.comprise'
 --
 ::
 |%
