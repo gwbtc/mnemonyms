@@ -3,7 +3,6 @@ abate
 abduct
 abducts
 abet
-abey
 abhor
 abide
 ablate
@@ -28,7 +27,6 @@ abstain
 abstract
 abstruse
 absurd
-abush
 abut
 abuzz
 abyss
@@ -243,11 +241,9 @@ attacked
 attacks
 attain
 attains
-attatched
 attempt
 attempts
 attend
-attent
 attest
 attests
 attired
@@ -380,7 +376,6 @@ betrayed
 betrays
 betroth
 betrothed
-betrough
 between
 betwixt
 beware
@@ -434,15 +429,16 @@ cartels
 cartoon
 cascade
 cascades
-casette
-casettes
 cashier
 cashiers
+cassette
+cassettes
 cavort
 cavorts
 cement
 cerise
 chagrin
+chalet
 champagne
 chanteuse
 charade
@@ -461,11 +457,9 @@ coerce
 coerced
 cohere
 cohered
-colate
 collage
 collapse
 collapsed
-collate
 collect
 collects
 collide
@@ -710,7 +704,6 @@ denounce
 deny
 depart
 departs
-depay
 depend
 depends
 depict
@@ -868,6 +861,7 @@ distinct
 distort
 disturb
 disuse
+divan
 diverge
 divert
 diverts
@@ -966,7 +960,6 @@ enrage
 enraged
 enrich
 enriched
-enright
 enroll
 enrolled
 enrolls
@@ -1107,6 +1100,7 @@ fatigues
 ferment
 ferments
 festoon
+festooned
 finesse
 firsthand
 fondue
@@ -1118,6 +1112,7 @@ forecasts
 foreclose
 forego
 foresee
+foreseen
 foresees
 forestall
 foretell
@@ -1134,8 +1129,6 @@ forgone
 forgot
 forlorn
 forsake
-forsee
-forseen
 forsworn
 frontier
 frontiers
@@ -1156,6 +1149,7 @@ grotesque
 guffaw
 guitar
 guitars
+harangue
 harass
 harpoon
 harpoons
@@ -1228,7 +1222,6 @@ inscribes
 insist
 insole
 inspect
-inspite
 install
 instate
 instruct
@@ -1239,7 +1232,6 @@ intense
 intone
 intones
 intrudes
-intrust
 invade
 invades
 invent
@@ -1283,6 +1275,7 @@ malaise
 malign
 maltese
 mankind
+maraud
 marine
 marines
 maroon
@@ -1409,7 +1402,7 @@ outpace
 outran
 outrun
 outshone
-outstrech
+outstretch
 outstretched
 outstrip
 outstrips
@@ -1471,6 +1464,7 @@ police
 polite
 pollute
 pollutes
+pomade
 pontoon
 portend
 portends
@@ -1484,7 +1478,6 @@ precede
 precedes
 precise
 preclude
-precure
 predate
 predict
 predicts
@@ -1847,6 +1840,12 @@ roulette
 routine
 routines
 royale
+salute
+sardine
+shampoo
+stampede
+suppose
+suppress
 taboo
 taboos
 tattoo
@@ -1864,6 +1863,7 @@ tirades
 today
 tonight
 torment
+toupee
 toward
 towards
 traduce
