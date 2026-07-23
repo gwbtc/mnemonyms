@@ -50,19 +50,19 @@
 ::
 ++  test-cometize-fails-tweaked
   %-  expect-fail
-  |.((~(cometize me [.y 128 english]) [~zod *@da ~zod]))
+  |.((~(cometize me [.y 128 english]) [*bowl:gall ~zod]))
 ::
 ++  test-cometize-fails-narrow-width
   %-  expect-fail
-  |.((~(cometize me [.n 64 english]) [~zod *@da ~zod]))
+  |.((~(cometize me [.n 64 english]) [*bowl:gall ~zod]))
 ::
 ++  test-cometize-fails-wide-width
   %-  expect-fail
-  |.((~(cometize me [.n 256 english]) [~zod *@da ~zod]))
+  |.((~(cometize me [.n 256 english]) [*bowl:gall ~zod]))
 ::
 ++  test-cometize-fails-comet-input
   %-  expect-fail
-  |.((~(cometize me [.n 128 english]) [~zod *@da mock-ship]))
+  |.((~(cometize me [.n 128 english]) [*bowl:gall mock-ship]))
 ::
 ++  test-ship-untweaked
   %+  expect-eq

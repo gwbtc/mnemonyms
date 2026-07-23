@@ -85,22 +85,22 @@
   ::  the 128-bit fingerprint of its networking pubkey
   ::  at its current key rotation
   ++  cometize
-    |=  [our=@pH now=@da who=@pG]
+    |=  [=bowl:gall who=@pG]
     ^-  @pH
     ::  non-comet ships are unverifable,
     ::  more in-practice than in-theory
     ~|  %unverifiable
     ?<  tweaked
-    |~  %wrong-bitwidth
+    ~|  %wrong-bitwidth
     ?>  =(128 width)
     ?:  =(%pawn (clan:title who))
       ~|(%already-a-comet !!)
     =/  lyf=@ud
-      .^(@ud %j /(scot %p our)/life/(scot %da now)/(scot %p who))
+      .^(@ud %j /(scot %p our.bowl)/life/(scot %da now.bowl)/(scot %p who))
     =/  key=(unit [crypto-suite=@ud =pass])
       .^  (unit [crypto-suite=@ud =pass])
           %j
-          /(scot %p our)/puby/(scot %da now)/(scot %p who)/(scot %ud lyf)
+          /(scot %p our.bowl)/puby/(scot %da now.bowl)/(scot %p who)/(scot %ud lyf)
       ==
     ?~  key
       ~|(%key-not-found !!)
